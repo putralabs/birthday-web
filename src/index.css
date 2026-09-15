@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night-950: #101426;
+  --color-night-900: #151a32;
+  --color-night-800: #1d2440;
+  --color-night-700: #2a3358;
+  --color-blush-300: #f3a8c7;
+  --color-blush-400: #ee8fb5;
+  --color-lilac-300: #b9a7ff;
+  --color-gold-300: #e8c77b;
+  --color-cream-50: #fff7ec;
+  --font-display: "Playfair Display", "Georgia", serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: #101426;
+  color: #fff7ec;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #f3a8c7;
+  color: #101426;
+}
+
+:focus-visible {
+  outline: 2px solid #e8c77b;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #101426;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a3358;
+  border-radius: 8px;
+}
+
+/* candle flame flicker */
+@keyframes flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1) rotate(-1.5deg); opacity: 1; }
+  25% { transform: scaleY(1.08) scaleX(0.96) rotate(1.5deg); opacity: 0.95; }
+  50% { transform: scaleY(0.94) scaleX(1.04) rotate(-1deg); opacity: 1; }
+  75% { transform: scaleY(1.05) scaleX(0.98) rotate(1deg); opacity: 0.92; }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes cake-float {
+  0%, 100% { transform: translateY(4px); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+@keyframes flip-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -14px); }
+}
+@keyframes smoke-rise {
+  0% { opacity: 0.7; transform: translateY(0) scale(0.6); }
+  100% { opacity: 0; transform: translateY(-46px) scale(1.4); }
+}
+
+.animate-flicker { animation: flicker 0.9s ease-in-out infinite; transform-origin: 50% 100%; }
+.animate-float-slow { animation: float-slow 7s ease-in-out infinite; }
+.animate-cake-float { animation: cake-float 5s ease-in-out infinite; }
+.animate-glow { animation: glow-pulse 2.4s ease-in-out infinite; }
+.animate-flip-in { animation: flip-in 0.45s ease-out; }
+.animate-drift { animation: drift 9s ease-in-out infinite; }
+.animate-smoke { animation: smoke-rise 1.6s ease-out forwards; }
+
+/* guided hint: soft pulsing outline for the next relevant object (PRD 48) */
+@keyframes hint-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 199, 123, 0.55); }
+  50% { box-shadow: 0 0 0 10px rgba(232, 199, 123, 0); }
+}
+.hint-glow { animation: hint-pulse 1.8s ease-out infinite; outline: 2px solid rgba(232, 199, 123, 0.65); outline-offset: 4px; }
+
+/* custom cursor: hide native only on precise pointers */
+@media (pointer: fine) {
+  .custom-cursor-on, .custom-cursor-on a, .custom-cursor-on button,
+  .custom-cursor-on input, .custom-cursor-on [role="button"] {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

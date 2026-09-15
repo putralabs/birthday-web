@@ -1,0 +1,30 @@
+# Deps & build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+nul
+nul.*
+
+# Env & editor
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+
+# AI / agent artifacts — jangan di-push
+.opencode/
+opencode.json
+opencode.jsonc
+prd.md
+PRD.md
+CLAUDE.md
+AGENTS.md
+*.ai.md
