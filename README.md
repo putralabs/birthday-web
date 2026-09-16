@@ -1,4 +1,4 @@
-# Indah Birthday - Hadiah Digital Interaktif
+# Birthday Web - Hadiah Digital Interaktif
 
 Sebuah website kejutan ulang tahun yang imersif untuk Indah Nurul Qur'ani.
 Alurnya sinematik: pembuka → amplop digital → kamar ulang tahun interaktif
