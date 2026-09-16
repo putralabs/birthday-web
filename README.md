@@ -1,4 +1,4 @@
-# Indah Birthday — Hadiah Digital Interaktif
+# Indah Birthday - Hadiah Digital Interaktif
 
 Sebuah website kejutan ulang tahun yang imersif untuk Indah Nurul Qur'ani.
 Alurnya sinematik: pembuka → amplop digital → kamar ulang tahun interaktif
@@ -10,10 +10,10 @@ surat, kenangan) sampai selebrasi akhir dengan confetti dan kembang api.
 
 ## Fitur
 
-- **Opening adaptif tanggal** — sebelum hari H tampil countdown + teaser harian,
+- **Opening adaptif tanggal** - sebelum hari H tampil countdown + teaser harian,
   pas hari H / sesudahnya tampil sapaan ulang tahun.
-- **Amplop digital animasi** — segel, flap 3D, surat naik, tombol masuk.
-- **Birthday room interaktif** — kamera fokus per objek, parallax, progress dots:
+- **Amplop digital animasi** - segel, flap 3D, surat naik, tombol masuk.
+- **Birthday room interaktif** - kamera fokus per objek, parallax, progress dots:
   - Lampu gantung (toggle + hint alur)
   - Kotak hadiah (shake → buka → kartu pesan)
   - Bunga di kusen jendela (mekar bertahap → pesan rahasia)
@@ -21,14 +21,14 @@ surat, kenangan) sampai selebrasi akhir dengan confetti dan kembang api.
   - Dinding foto + lightbox
   - Bintang rahasia (easter egg, 3 bintang → kejutan)
   - Hati tersembunyi
-- **Kue & lilin** — lilin menyala satu per satu, bisa ditiup satu-satu atau via
+- **Kue & lilin** - lilin menyala satu per satu, bisa ditiup satu-satu atau via
   deteksi tiupan mikrofon, lalu momen wish.
-- **Toples harapan** — kartu harapan bisa dibalik satu per satu.
-- **Surat pribadi** — efek typewriter + skip.
-- **Galeri kenangan & final** — grid foto, layar akhir + tombol replay dan
+- **Toples harapan** - kartu harapan bisa dibalik satu per satu.
+- **Surat pribadi** - efek typewriter + skip.
+- **Galeri kenangan & final** - grid foto, layar akhir + tombol replay dan
   tombol balas via WhatsApp.
-- **Musik** — audio provider + music player + visualizer, SFX per interaksi.
-- **Aksesibilitas** — label ARIA, fokus keyboard, skip-link, hormat ke
+- **Musik** - audio provider + music player + visualizer, SFX per interaksi.
+- **Aksesibilitas** - label ARIA, fokus keyboard, skip-link, hormat ke
   `prefers-reduced-motion`.
 
 ## Tech Stack
@@ -48,15 +48,15 @@ npm run preview  # pratinjau hasil build
 
 Mode tanggal untuk QA (hanya saat `npm run dev`):
 
-- `http://localhost:5173/?as=before` — countdown sebelum hari H
-- `http://localhost:5173/?as=birthday` — tampilan pas hari H
-- `http://localhost:5173/?as=after` — tampilan sesudah hari H
+- `http://localhost:5173/?as=before` - countdown sebelum hari H
+- `http://localhost:5173/?as=birthday` - tampilan pas hari H
+- `http://localhost:5173/?as=after` - tampilan sesudah hari H
 
 ## Kustomisasi
 
 Semua konten personal terpusat di satu file:
 
-- `src/data/birthdayData.js` — nama, tanggal (`birthday: '2026-12-21'`),
+- `src/data/birthdayData.js` - nama, tanggal (`birthday: '2026-12-21'`),
   pesan, memori, wishes, rahasia bintang, link WhatsApp, teaser harian,
   config musik (`/audio/birthday.mp3`).
 
@@ -104,4 +104,4 @@ src/
 
 ## Lisensi
 
-MIT — lihat [LICENSE](LICENSE).
+MIT - lihat [LICENSE](LICENSE).

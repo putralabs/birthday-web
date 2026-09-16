@@ -19,7 +19,7 @@ nul.*
 .vscode/
 .idea/
 
-# AI / agent artifacts — jangan di-push
+# AI / agent artifacts - jangan di-push
 .opencode/
 opencode.json
 opencode.jsonc
