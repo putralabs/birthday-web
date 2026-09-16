@@ -39,7 +39,7 @@ export default function InteractiveHeart({ onFound, style }) {
               initial={{ opacity: 0, y: 12, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-2xl bg-[#FFF7EC] p-4 text-left text-[#1d2440] shadow-2xl"
+              className="absolute bottom-full left-1/2 z-30 mb-2 w-56 max-w-[70vw] -translate-x-1/2 rounded-2xl bg-[#FFF7EC] p-4 text-left text-[#1d2440] shadow-2xl"
               role="status"
             >
               <p className="text-[11px] uppercase tracking-[0.25em] text-[#EE8FB5]">You found this one.</p>

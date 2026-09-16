@@ -1,33 +1,22 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const TYPED = 'Nih, udah kebuka.'
+const TYPED_TITLE = 'Happy Birthday, Indah'
+const TYPED_SUB = 'Masuk aja, kamarnya udah rapi.'
 
 // Amplop: awalnya cuma amplop tertutup berlogo love, suratnya ngumpet
 // total di balik kantong amplop. Dipencet, segel pecah, flap segitiga
 // kebuka, surat naik keluar lewat mulut amplop, terus tampil paling depan.
+// Judul diketik dulu huruf per huruf, subjudul nyusul diketik juga.
+// Tombol lanjut baru muncul kalau semua ketikan beres (bukan timer).
 export default function Envelope({ onDone, onOpen }) {
   const [stage, setStage] = useState('closed') // closed | opening | letter | done
   const [opened, setOpened] = useState(false)
-  const [typed, setTyped] = useState('')
+  const [typedTitle, setTypedTitle] = useState(0)
+  const [typedSub, setTypedSub] = useState(0)
   const reduced =
     typeof window !== 'undefined' &&
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-
-  useEffect(() => {
-    if (stage !== 'done') return
-    if (reduced) {
-      setTyped(TYPED)
-      return
-    }
-    let i = 0
-    const t = setInterval(() => {
-      i += 1
-      setTyped(TYPED.slice(0, i))
-      if (i >= TYPED.length) clearInterval(t)
-    }, 60)
-    return () => clearInterval(t)
-  }, [stage, reduced])
 
   const open = () => {
     if (opened) return
@@ -44,9 +33,29 @@ export default function Envelope({ onDone, onOpen }) {
 
   const isClosed = stage === 'closed'
   const letterOut = stage === 'letter' || stage === 'done'
-  const showText = stage === 'done'
-  // Isi surat dirender selagi naik (letter) biar ukuran kartu stabil,
-  // teksnya fade masuk bertahap. Ketikan jalan pas done.
+  const titleDone = typedTitle >= TYPED_TITLE.length
+  const allDone = titleDone && typedSub >= TYPED_SUB.length
+  // Isi surat dirender selagi naik (letter) biar ukuran kartu stabil.
+  // Ketikan judul jalan bareng suratnya naik, subjudul nyusul.
+
+  useEffect(() => {
+    if (!letterOut) return
+    if (reduced) {
+      setTypedTitle(TYPED_TITLE.length)
+      setTypedSub(TYPED_SUB.length)
+      return
+    }
+    if (typedTitle >= TYPED_TITLE.length) return
+    const t = setTimeout(() => setTypedTitle((n) => Math.min(TYPED_TITLE.length, n + 1)), 55)
+    return () => clearTimeout(t)
+  }, [letterOut, typedTitle, reduced])
+
+  useEffect(() => {
+    if (!titleDone || reduced) return
+    if (typedSub >= TYPED_SUB.length) return
+    const t = setTimeout(() => setTypedSub((n) => Math.min(TYPED_SUB.length, n + 1)), 35)
+    return () => clearTimeout(t)
+  }, [titleDone, typedSub, reduced])
 
   return (
     <motion.div
@@ -98,16 +107,18 @@ export default function Envelope({ onDone, onOpen }) {
                 transition={{ duration: 0.7, delay: 0.35 }}
                 className="block"
               >
-                <span aria-label={TYPED} className="block min-h-[20px] font-display text-base italic text-[#EE8FB5]" style={{ fontFamily: 'var(--font-display)' }}>
-                  <span aria-hidden="true">{typed}</span>
-                  {showText && typed.length < TYPED.length && (
-                    <span aria-hidden="true" className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-[#EE8FB5]" />
+                <span aria-label={TYPED_TITLE} className="mt-3 block min-h-[72px] font-display text-2xl leading-snug" style={{ fontFamily: 'var(--font-display)' }}>
+                  <span aria-hidden="true">{TYPED_TITLE.slice(0, typedTitle)}</span>
+                  {!titleDone && (
+                    <span aria-hidden="true" className="ml-0.5 inline-block h-6 w-[2px] animate-pulse bg-[#EE8FB5]" />
                   )}
                 </span>
-                <span className="mt-3 block font-display text-2xl leading-snug" style={{ fontFamily: 'var(--font-display)' }}>
-                  Happy Birthday, Indah
+                <span aria-label={TYPED_SUB} className="mt-2 block min-h-[20px] text-sm text-[#1d2440]/60">
+                  <span aria-hidden="true">{TYPED_SUB.slice(0, typedSub)}</span>
+                  {titleDone && !allDone && (
+                    <span aria-hidden="true" className="ml-0.5 inline-block h-3.5 w-[2px] animate-pulse bg-[#EE8FB5]" />
+                  )}
                 </span>
-                <span className="mt-2 block text-sm text-[#1d2440]/60">Masuk aja, kamarnya udah rapi.</span>
               </motion.span>
             )}
           </AnimatePresence>
@@ -202,20 +213,12 @@ export default function Envelope({ onDone, onOpen }) {
       </motion.button>
 
       <div className="mt-8 flex min-h-[48px] items-center gap-3">
-        {showText && (
+        {allDone && (
           <button
             onClick={onDone}
             className="min-h-[48px] cursor-pointer rounded-full bg-[#FFF7EC] px-10 py-3.5 text-sm font-semibold text-[#101426] shadow-[0_0_40px_rgba(243,168,199,0.35)] transition hover:scale-[1.03] active:scale-95"
           >
             Masuk ke kejutan
-          </button>
-        )}
-        {!showText && !isClosed && (
-          <button
-            onClick={onDone}
-            className="min-h-[44px] cursor-pointer rounded-full border border-white/15 px-6 py-2.5 text-xs uppercase tracking-[0.25em] text-white/60 transition hover:text-white"
-          >
-            Skip
           </button>
         )}
       </div>

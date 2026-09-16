@@ -50,7 +50,26 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
   const [wishNote, setWishNote] = useState(0)
   const idleTimer = useRef(null)
   const toastTimer = useRef(null)
+  const briefTimer = useRef(null)
+  const focusRef = useRef(focus)
   const litCount = candles.filter(Boolean).length
+
+  useEffect(() => { focusRef.current = focus }, [focus])
+  useEffect(() => () => clearTimeout(briefTimer.current), [])
+
+  // Zoom hint sekilas lalu langsung kembali ke wide.
+  // Guard focusRef mencegah timer basi menimpa fokus baru.
+  const zoomBriefly = useCallback((id, ms = 1800) => {
+    clearTimeout(briefTimer.current)
+    focusRef.current = id
+    actions.setFocus(id)
+    briefTimer.current = setTimeout(() => {
+      if (focusRef.current === id) {
+        focusRef.current = 'wide'
+        actions.setFocus('wide')
+      }
+    }, ms)
+  }, [actions])
 
   const say = useCallback((text, ms = 4200) => {
     setToast(text)
@@ -120,7 +139,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
     }
     if (!giftOpened) {
       actions.setHint('gift')
-      actions.setFocus('gift')
+      zoomBriefly('gift')
       say('Buka hadiahnya dulu. Ada di kanan bawah.')
       return
     }
@@ -189,10 +208,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
 
   const focusFlower = () => {
     poke()
-    actions.setFocus('flower')
-    setTimeout(() => {
-      if (!celebrationStarted) actions.setFocus('wide')
-    }, 1500)
+    zoomBriefly('flower', 1500)
   }
 
   const memories = birthdayData.memories
@@ -214,7 +230,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
           <button onClick={revealCake} className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-xs uppercase tracking-[0.2em] text-white/70 transition hover:border-[#E8C77B]/50 hover:text-white">
             <CakeIcon className="h-4 w-4" /> Cake
           </button>
-          <button onClick={() => { actions.setFocus('gift'); say('Hadiahnya di kanan bawah. Buka pelan pelan.') }} className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-xs uppercase tracking-[0.2em] text-white/70 transition hover:border-[#F3A8C7]/50 hover:text-white">
+          <button onClick={() => { zoomBriefly('gift'); say('Hadiahnya di kanan bawah. Buka pelan pelan.') }} className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-xs uppercase tracking-[0.2em] text-white/70 transition hover:border-[#F3A8C7]/50 hover:text-white">
             <Gift className="h-4 w-4" /> Gift
           </button>
           <button onClick={onReplay} className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-xs uppercase tracking-[0.2em] text-white/70 transition hover:border-white/40 hover:text-white">
@@ -458,7 +474,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
               style={{ right: '5.5%', bottom: '3%' }}
               opened={giftOpened}
               hint={hint === 'gift'}
-              onInteract={() => { poke(); actions.setFocus('gift') }}
+              onInteract={() => { poke(); zoomBriefly('gift') }}
               onOpen={() => { actions.setGiftOpened(true); actions.setFocus('wide'); say('Disimpen ya pesannya. Sekarang lihat ke meja tengah.') }}
             />
             {/* toples harapan di atas lemari. PRD 46 */}
@@ -555,7 +571,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
       {/* cake bottom sheet */}
       <AnimatePresence>
         {overlay === 'cake' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[75] flex items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-label="Kue ulang tahun" onClick={() => { setOverlay(null); if (!celebrationStarted) actions.setFocus('wide') }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[75] flex items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-label="Kue ulang tahun" onClick={() => { setOverlay(null); actions.setFocus('wide') }}>
             <motion.div
               initial={{ y: 80, opacity: 0, scale: 0.97 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -564,7 +580,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-[#151A32] p-6 text-center shadow-2xl md:p-8"
             >
-              <button onClick={() => { setOverlay(null); if (!celebrationStarted) actions.setFocus('wide') }} aria-label="Tutup kue" className="absolute right-3 top-3 flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white">
+              <button onClick={() => { setOverlay(null); actions.setFocus('wide') }} aria-label="Tutup kue" className="absolute right-3 top-3 flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white">
                 <X className="h-5 w-5" />
               </button>
               <p className="text-[11px] uppercase tracking-[0.3em] text-[#B9A7FF]">
@@ -651,7 +667,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
       {/* celebration message */}
       <AnimatePresence>
         {overlay === 'message' && (
-          <Sheet onClose={() => setOverlay(null)} label="Pesan ulang tahun">
+          <Sheet onClose={() => { setOverlay(null); actions.setFocus('wide') }} label="Pesan ulang tahun">
             <p className="text-[11px] uppercase tracking-[0.3em] text-[#E8C77B]">Happy Birthday</p>
             <h3 className="mt-2 font-display text-3xl text-[#FFF7EC] md:text-4xl" style={{ fontFamily: 'var(--font-display)' }}>
               Indah Nurul Qur&apos;ani
@@ -681,7 +697,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
       {/* memories */}
       <AnimatePresence>
         {overlay === 'memories' && (
-          <Sheet wide onClose={() => setOverlay(null)} label="Kenangan">
+          <Sheet wide onClose={() => { setOverlay(null); actions.setFocus('wide') }} label="Kenangan">
             <p className="text-[11px] uppercase tracking-[0.3em] text-[#E8C77B]">A Little Timeline</p>
             <h3 className="mt-2 font-display text-3xl text-[#FFF7EC]" style={{ fontFamily: 'var(--font-display)' }}>Potongan cerita <span className="italic text-[#F3A8C7]">tentangmu</span></h3>
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -703,7 +719,7 @@ export default function BirthdayRoom({ state, actions, flower, flowerActions, au
       {/* final */}
       <AnimatePresence>
         {overlay === 'final' && (
-          <Sheet onClose={() => setOverlay(null)} label="Akhir cerita">
+          <Sheet onClose={() => { setOverlay(null); actions.setFocus('wide') }} label="Akhir cerita">
             <span aria-hidden="true" className="text-2xl text-[#E8C77B]">✦</span>
             <h3 className="mt-3 font-display text-3xl text-[#FFF7EC] md:text-4xl" style={{ fontFamily: 'var(--font-display)' }}>Happy Birthday, Indah.</h3>
             <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-white/60">For Indah. {birthdayData.messages.finalCredit}</p>

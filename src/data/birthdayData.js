@@ -32,40 +32,40 @@ export const birthdayData = {
 
   memories: [
     {
-      image: '/images/memory-01.svg',
-      title: 'Tawa pertama',
-      description: 'Candaan garing yang malah bikin ngakak terus.',
-      date: 'Suatu sore',
+      image: '/images/indah-1.jpg',
+      title: 'Waktu masih kecil',
+      description: 'Nemu foto ini di galeri. Bandonya pink, bonekanya segede badan, senyumnya udah khas dari dulu.',
+      date: 'Zaman bocah',
     },
     {
-      image: '/images/memory-02.svg',
-      title: 'Langit sore',
-      description: 'Ngobrol ngalor ngidul sampai lupa waktu pulang.',
-      date: 'Senja itu',
+      image: '/images/indah-2.jpg',
+      title: 'Selfie sebelum pergi',
+      description: 'Abis siap-siap terus selfie bentar. Bilangnya iseng, tapi ya udah aku simpen soalnya bagus.',
+      date: 'Di kamar',
     },
     {
-      image: '/images/memory-03.svg',
-      title: 'Hal kecil',
-      description: 'Hal sepele, tapi kalau sama kamu jadi berkesan.',
-      date: 'Hari biasa',
+      image: '/images/indah-3.jpg',
+      title: 'Malam di tenda',
+      description: 'Difoto diam-diam pas lagi nggak lihat kamera. Dingin-dingin begini masih sempat gaya.',
+      date: 'Malam itu',
     },
     {
-      image: '/images/memory-04.svg',
-      title: 'Melewati lelah',
-      description: 'Hari itu berat, untung ada kamu buat saling nguatin.',
-      date: 'Hari yang berat',
+      image: '/images/indah-4.jpg',
+      title: 'Sore di pantai',
+      description: 'Sore-sore di pantai, ngadep laut mulu. Anteng banget, mataharinya juga pas banget. Diliatnya enak aja gitu.',
+      date: 'Sore itu',
     },
     {
-      image: '/images/memory-05.svg',
-      title: 'Halaman kosong',
-      description: 'Masih banyak rencana yang belum kita jalanin.',
-      date: 'Besok',
+      image: '/images/indah-5.jpg',
+      title: 'Angin laut',
+      description: 'Di atas kapal, kacamatanya kepasang, rambutnya kebawa angin. Gayanya anteng banget padahal.',
+      date: 'Di atas kapal',
     },
     {
-      image: '/images/memory-06.svg',
-      title: 'Malam ini',
-      description: 'Dan malam ini kita rayain bareng. Duduk sini.',
-      date: '21 December 2026',
+      image: '/images/indah-6.jpg',
+      title: 'Selfie santuy',
+      description: 'Kaosan doang, rambutnya berantakan, senyumnya tipis. Tapi kok tetep bagus sih.',
+      date: 'Di rumah',
     },
   ],
 
@@ -93,7 +93,7 @@ export const birthdayData = {
   // Nomor WhatsApp tujuan (format internasional tanpa +, tanpa spasi).
   reply: {
     label: 'Kirim peluk balik',
-    url: 'https://wa.me/62895604134767?text=Aku%20sudah%20buka%20kejutannya.',
+    url: 'https://wa.me/62895604134767?text=udah%20aku%20buka%20semuanya%2C%20makasih%20yaa',
   },
 
   // Kartu teaser harian sebelum hari H. daysOut = dibuka saat sisa hari <= angka ini.

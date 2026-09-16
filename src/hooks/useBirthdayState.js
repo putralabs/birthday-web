@@ -53,13 +53,8 @@ export function useBirthdayState() {
   })
   const [celebrationStarted, setCelebration] = useState(false)
   const [popped, setPopped] = useState({})
-  const [foundSecrets, setFoundSecrets] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('foundSecrets') || '[]')
-    } catch {
-      return []
-    }
-  })
+  // Secret ketemu cuma seumur sesi. Refresh = ngulang dari nol.
+  const [foundSecrets, setFoundSecrets] = useState([])
   const [hint, setHint] = useState(null)
   const [session, setSession] = useState(0)
 
@@ -81,13 +76,14 @@ export function useBirthdayState() {
     done: diff <= 0,
   }
 
+  // Bersihin sisa simpanan versi lama biar refresh beneran dari nol.
   useEffect(() => {
     try {
-      localStorage.setItem('foundSecrets', JSON.stringify(foundSecrets))
+      localStorage.removeItem('foundSecrets')
     } catch {
       /* private mode */
     }
-  }, [foundSecrets])
+  }, [])
 
   const toggleLamp = useCallback(() => {
     setLampOn((on) => {

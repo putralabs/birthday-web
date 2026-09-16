@@ -1,7 +1,25 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { MemoryImage } from './MemoryGallery.jsx'
+
+function LightboxImage({ photo }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) {
+    return (
+      <div className="flex max-h-[55vh] min-h-[200px] w-full items-center justify-center bg-gradient-to-br from-[#F3A8C7] to-[#B9A7FF] md:max-h-[60vh]" role="img" aria-label={photo.alt}>
+        <span className="font-display text-5xl italic text-white/90" style={{ fontFamily: 'var(--font-display)' }}>I</span>
+      </div>
+    )
+  }
+  return (
+    <img
+      src={photo.image}
+      alt={photo.alt}
+      onError={() => setFailed(true)}
+      className="block h-auto max-h-[55vh] w-auto max-w-full object-contain md:max-h-[60vh]"
+    />
+  )
+}
 
 export default function PhotoLightbox({ photos, index, onClose, onNav }) {
   const photo = photos[index]
@@ -62,10 +80,15 @@ export default function PhotoLightbox({ photos, index, onClose, onNav }) {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[80vh] w-full max-w-2xl overflow-hidden rounded-lg bg-[#FFF7EC] p-3 pb-4 shadow-2xl"
+        className="flex max-h-[85dvh] w-fit max-w-[92vw] flex-col overflow-hidden rounded-lg bg-[#FFF7EC] p-3 pb-4 shadow-2xl md:max-w-2xl"
       >
-        <MemoryImage photo={photo} large />
-        <figcaption className="px-2 pt-3 text-center font-display text-base italic text-[#1d2440]" style={{ fontFamily: 'var(--font-display)' }}>
+        <div className="flex min-h-0 shrink items-center justify-center overflow-hidden rounded-md bg-[#1d2440]">
+          <LightboxImage photo={photo} />
+        </div>
+        {/* w-0 min-w-full: caption ngikutin lebar foto, bukan sebaliknya.
+            Tanpa ini teks panjang bikin bingkai melar dan foto portrait
+            kelihatan sempit dengan ruang kosong di kiri-kanan. */}
+        <figcaption className="max-h-[24vh] w-0 min-w-full shrink-0 overflow-y-auto px-2 pt-3 text-center font-display text-base italic leading-relaxed text-[#1d2440]" style={{ fontFamily: 'var(--font-display)' }}>
           {photo.caption}
         </figcaption>
       </motion.figure>

@@ -16,8 +16,7 @@ export default function SecretStars({ found, onFind, onUnlockAll }) {
   const [burst, setBurst] = useState({})
   const [open, setOpen] = useState(null)
 
-  const click = (i) => {
-    if (found.includes(`star-${i}`)) {
+  const click = (i) => {    if (found.includes(`star-${i}`)) {
       setOpen(i)
       return
     }
@@ -30,9 +29,21 @@ export default function SecretStars({ found, onFind, onUnlockAll }) {
       setBurst((b) => ({ ...b, [i]: (b[i] || 0) + 1 }))
       onFind(`star-${i}`)
       setOpen(i)
-      const total = found.length + 1
+      const total = starFound.length + 1
       if (total >= 3) setTimeout(() => onUnlockAll?.(), 700)
     }
+  }
+
+  // `found` global isinya semua secret (heart, flower, photo...).
+  // Urutan nemu bintang dihitung dari yang star-* saja.
+  const starFound = found.filter((f) => f.startsWith('star-'))
+
+  // Teks ikut urutan nemu, bukan nomor posisi bintang.
+  // Bintang yang baru diklik belum masuk `found`, jadi fallback ke starFound.length.
+  const orderOf = (i) => {
+    const idx = starFound.indexOf(`star-${i}`)
+    if (idx !== -1) return Math.min(idx, birthdayData.secrets.stars.length - 1)
+    return Math.min(starFound.length, birthdayData.secrets.stars.length - 1)
   }
 
   return (
@@ -65,12 +76,10 @@ export default function SecretStars({ found, onFind, onUnlockAll }) {
             role="status"
           >
             <p className="text-[11px] uppercase tracking-[0.25em] text-[#E8C77B]">
-              {found.length >= 3 ? 'Special surprise unlocked' : 'One more little surprise'}
+              {starFound.length >= 3 ? 'Special surprise unlocked' : 'One more little surprise'}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-white/80">
-              {found.length >= 3 && open === 2
-                ? birthdayData.secrets.starsUnlocked
-                : birthdayData.secrets.stars[open]}
+              {birthdayData.secrets.stars[orderOf(open)]}
             </p>
             <button
               onClick={() => setOpen(null)}
